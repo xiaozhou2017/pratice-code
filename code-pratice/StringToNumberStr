@@ -2,30 +2,31 @@ package com.example.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.math.BigDecimal;
-
 @SpringBootTest
 class Demo1ApplicationTests {
 
     @Test
-    public  void tets() {
-        System.out.println(extractAndFormatNumber("abcd123.456")); // 输出: 123.45
-        System.out.println(extractAndFormatNumber("abcd123")); // 输出: 123.00
-        System.out.println(extractAndFormatNumber("abcd123.1")); // 输出: 123.10
+    public  void tests() {
+        System.out.println(extractAndFormatNumber("abcd123.456",2)); // 输出: 123.45
+        System.out.println(extractAndFormatNumber("abcd123",2)); // 输出: 123.00
+        System.out.println(extractAndFormatNumber("abcd123.1",2)); // 输出: 123.10
+        System.out.println(extractAndFormatNumber("abcd123.456",1)); // 输出: 123.4
+        System.out.println(extractAndFormatNumber("abcd123.4565",3)); // 输出: 123.456
     }
-        public  String extractAndFormatNumber(String input) {
+        public  String extractAndFormatNumber(String input,int scanSale) {
             // 使用正则表达式匹配字符串中的数字部分（包括小数点后的数字）
             String numberStr = input.replaceAll("[^\\d.]+", "");
             //保留俩位小数 处理小数点不四舍五入问题
             if(numberStr.contains(".")){
                 int pointIndex=numberStr.indexOf(".");
-                if(numberStr.length()-1>=pointIndex+2){
-                    numberStr=numberStr.substring(0,pointIndex+1+2);
+                if(numberStr.length()-1>=pointIndex+scanSale){
+                    numberStr=numberStr.substring(0,pointIndex+1+scanSale);
                 }
             }
             // 使用String.format()来格式化数字，保留两位小数
-            // 如果原数字没有小数部分，将自动补充.00
-            return String.format("%.2f", Double.parseDouble(numberStr));
+            // 如果原数字没有小数部分，将自动补充多位0
+            String strFormat="%."+scanSale+"f";
+            return String.format(strFormat, Double.parseDouble(numberStr));
         }
 
 
